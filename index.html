@@ -16,14 +16,14 @@
             <a href="#profile-intro">Home</a>
             <a href="#updates">Updates</a>
             <a href="#research">Research</a>
+            <a href="#service">Service</a>
             <!-- <a href="#projects">Projects</a> -->
         </header>
         <div id="profile">
             <div id="profile-pic">
                 <!-- <img src="assets/images/profile.png" /> -->
-                <div id="profile-pic">
-                    <img src="assets/images/profile_01_21.png" style="width: 400px; height: 400px;" />
-                </div>
+                <img class="pic-default" src="assets/images/profile_main.png" />
+                <img class="pic-hover" src="assets/images/profile_hover.png" />
                 <!-- <p style="text-align:left;margin-top:-15px;">Picture taken by <a
                         href="http://www.columbia.edu/~hqh2101/">Huy Ha</a></p> -->
             </div>
@@ -62,11 +62,10 @@
                     </a>
                 </div>
             </div>
-            <div style="clear: both;"></div>
         </div>
         <div class="section" id="updates">
             <h1>Updates</h1>
-            <ul>
+            <ul id="updates-list" class="collapsed">
                 <li> <b>Mar 2026</b> I joined <a href="https://prism.robotics.princeton.edu/">PRISM Lab</a> led by Prof. <a href="https://robodhruv.github.io/">Dhruv Shah</a> in Electrical and Computer Engineering at <a href="https://www.princeton.edu/">Princeton University</a> as a visiting PhD.
                 <li> <b>Feb 2026</b> "<a href="https://www.sciencedirect.com/science/article/abs/pii/S1474034626001461">AoA</a>" was accepted by <a href="https://www.sciencedirect.com/journal/advanced-engineering-informatics">Advanced Engineering Informatics</a>.
                 <li> <b>Oct 2024</b> I was the receipt of Travel Grant in Conference on Robot Learning (CoRL) 2024</a>. Thanks CoRL Organizing Committee!
@@ -79,6 +78,7 @@
                 <li> <b>May 2022</b> I was the receipt of the <a href="https://students.ubc.ca/enrolment/finances/award-search/vancouver/faculty-applied-science/general/4891">J.K. Zee Memorial Fellowship</a> at UBC!
                 <li> <b>May 2022</b> My first-ever paper "Virtual Reality-Based Expert Demonstrations for Training Construction Robots via Imitation Learning" was accepted by <a href="https://csce2022.com/">CSCE 2022</a> and won the <b>Best Student Paper Award</b>, General Conference!
             </ul>
+            <button id="updates-toggle" onclick="toggleUpdates()">Show more &#9662;</button>
             <p></p>
             <div style="clear: both;"></div>
         </div>
@@ -289,6 +289,26 @@
 
             <div style="clear: both;"></div>
         </div>
+        <div class="divider"></div>
+        <div class="section" id="service">
+            <h1>Service</h1>
+            <p><b>Conference Reviewer</b></p>
+            <ul>
+                <li>Conference on Neural Information Processing Systems (NeurIPS 2026)
+                <li>The IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR 2026)
+                <li>International Symposium on Automation and Robotics in Construction (ISARC 2024, 2025, 2026)
+                <li>ASCE International Conference on Computing in Civil Engineering (i3CE 2023, 2024, 2025, 2026)
+            </ul>
+            <p><b>Journal Reviewer</b></p>
+            <ul>
+                <li>Automation in Construction
+                <li>Journal of Computing in Civil Engineering
+                <li>Advanced Engineering Informatics
+                <li>Developments in the Built Environment
+                <li>Engineering Applications of Artificial Intelligence
+            </ul>
+            <div style="clear: both;"></div>
+        </div>
         <!-- <div class="divider"></div>
         <div style="display:flex;flex-direction: column;">
             <h1>Projects</h1>
@@ -317,6 +337,16 @@
             </tr>
           </tbody></table>
     </div>
+    <script>
+        function toggleUpdates() {
+            var list = document.getElementById('updates-list');
+            var btn = document.getElementById('updates-toggle');
+            list.classList.toggle('collapsed');
+            btn.innerHTML = list.classList.contains('collapsed')
+                ? 'Show more &#9662;'
+                : 'Show less &#9652;';
+        }
+    </script>
 </body>
 
 </html>
