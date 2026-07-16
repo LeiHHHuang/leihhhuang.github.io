@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IRL4IDM | Project Website</title>
+    <meta
+      name="description"
+      content="IRL4IDM learns inverse dynamics for video-generation robot planners from action-free videos using inverse reinforcement learning."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#top">IRL4IDM</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#overview">Overview</a>
+          <a href="#method">Method</a>
+          <a href="#results">Results</a>
+          <a href="#demos">Demos</a>
+          <a href="#citation">Citation</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">IROS 2026 Project Page</p>
+            <h1>
+              IRL4IDM: Inverse Reinforcement Learning for Inverse Dynamics
+              Model in Video Generation Robot Planner
+            </h1>
+            <div class="authors">
+              <p>
+                Lei Huang<sup>1</sup>
+                <span class="author-sep">·</span>
+                Zihan Zhu<sup>2</sup>
+                <span class="author-sep">·</span>
+                Tong Ren<sup>1</sup>
+                <span class="author-sep">·</span>
+                Zhengbo Zou<sup>1</sup>
+              </p>
+              <p class="affiliations">
+                <sup>1</sup>Columbia University
+                <span class="author-sep">·</span>
+                <sup>2</sup>Universit&eacute; de Montr&eacute;al &amp; Mila
+              </p>
+              <p class="author-contact">
+                Correspondence to
+                <a href="mailto:lh2921@columbia.edu">lh2921@columbia.edu</a>
+              </p>
+            </div>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#">arXiv</a>
+              <a class="button button-secondary" href="#">PDF</a>
+              <a class="button button-secondary" href="#">Code</a>
+            </div>
+            <ul class="hero-metrics" aria-label="Key metrics">
+              <li>
+                <strong>84.0%</strong>
+                <span>Overall on Meta-World</span>
+              </li>
+              <li>
+                <strong>84.0%</strong>
+                <span>Overall on LIBERO</span>
+              </li>
+              <li>
+                <strong>+12 to +28 pts</strong>
+                <span>Gain from finetuning</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section intro-video">
+          <div class="section-heading intro-heading">
+            <p class="eyebrow">Project Video</p>
+            <h2>Video overview</h2>
+            <p class="hero-summary intro-summary">
+              IRL4IDM grounds synthesized subgoals into executable robot
+              actions, showing strong performance across both nuanced grasping
+              and non-grasping manipulation tasks.
+            </p>
+          </div>
+          <div class="hero-media">
+            <div class="video-card">
+              <video
+                src="assets/videos/main-demo.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                poster="assets/images/teaser.png"
+              ></video>
+            </div>
+            <p class="media-caption">
+              Main project video highlighting the planning-to-control pipeline
+              and qualitative task execution examples.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="overview">
+          <div class="section-heading">
+            <p class="eyebrow">Overview</p>
+            <h2>Learning inverse dynamics without action labels</h2>
+          </div>
+          <div class="overview-grid">
+            <article class="panel abstract-panel">
+              <h3>Abstract</h3>
+              <p>
+                Video generation models offer a scalable way to plan robot
+                behavior from broad physical priors, but turning generated
+                videos into executable actions remains difficult. IRL4IDM
+                learns this inverse dynamics mapping from the same
+                action-free videos used to train or finetune the video
+                generator.
+              </p>
+              <p>
+                The method first learns a dense reward by temporally aligning
+                unlabeled demonstrations, then trains a goal-conditioned policy
+                with pseudo-subgoals sampled from those videos, and finally
+                finetunes the policy on model-generated subgoals to reduce
+                domain shift.
+              </p>
+            </article>
+
+            <article class="panel contribution-panel">
+              <h3>Why it matters</h3>
+              <ul class="clean-list">
+                <li>Removes dependence on action-labeled robot demonstrations.</li>
+                <li>Avoids handcrafted grasping heuristics used by prior methods.</li>
+                <li>Improves precisely where baselines tend to break: nuanced manipulation.</li>
+              </ul>
+            </article>
+
+            <figure class="panel figure-panel">
+              <img
+                src="assets/images/teaser.png"
+                alt="Teaser figure showing IRL4IDM bridging video generation and inverse dynamics."
+              />
+              <figcaption>
+                IRL4IDM uses inverse reinforcement learning to ground visual
+                plans into robot actions.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="section" id="method">
+          <div class="section-heading">
+            <p class="eyebrow">Method</p>
+            <h2>A three-stage training pipeline</h2>
+          </div>
+
+          <div class="method-layout">
+            <figure class="panel method-figure">
+              <img
+                src="assets/images/overall_framework.png"
+                alt="Overall framework of IRL4IDM."
+              />
+              <figcaption>
+                Stage 1 learns reward structure from unlabeled videos, Stage 2
+                trains a goal-conditioned inverse dynamics model with
+                pseudo-subgoals, and Stage 3 finetunes on synthesized subgoals.
+              </figcaption>
+            </figure>
+
+            <div class="stage-stack">
+              <article class="stage-card">
+                <span class="stage-index">01</span>
+                <h3>Reward learning via temporal alignment</h3>
+                <p>
+                  A visual encoder is pretrained with temporal cycle-consistency,
+                  producing an embedding space where progress toward subgoals
+                  can be measured densely.
+                </p>
+              </article>
+
+              <article class="stage-card">
+                <span class="stage-index">02</span>
+                <h3>Pseudo-subgoal RL for inverse dynamics</h3>
+                <p>
+                  Uniformly sampled frames from demonstrations act as
+                  intermediate goals, enabling online reinforcement learning
+                  without random exploration alone.
+                </p>
+              </article>
+
+              <article class="stage-card">
+                <span class="stage-index">03</span>
+                <h3>Finetuning on generated subgoals</h3>
+                <p>
+                  The policy is adapted to the distribution of model-generated
+                  plans, reducing the gap between demonstration frames and
+                  synthesized future observations.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="results">
+          <div class="section-heading">
+            <p class="eyebrow">Results</p>
+            <h2>Strong gains on both Meta-World and LIBERO</h2>
+          </div>
+
+          <div class="results-highlight">
+            <article class="metric-callout">
+              <span class="metric-label">Meta-World overall</span>
+              <strong>84.0%</strong>
+              <p>
+                Best overall performance across 5 tasks, including difficult
+                hammer and assembly behaviors.
+              </p>
+            </article>
+            <article class="metric-callout">
+              <span class="metric-label">LIBERO overall</span>
+              <strong>84.0%</strong>
+              <p>
+                Large margin over video-grounding baselines in kitchen-scene
+                manipulation tasks.
+              </p>
+            </article>
+            <article class="metric-callout">
+              <span class="metric-label">Reward ablation</span>
+              <strong>0 → 48 → 68%</strong>
+              <p>
+                Dense reward alone fails; milestone and sparse success signals
+                are both important.
+              </p>
+            </article>
+          </div>
+
+          <div class="benchmark-grid">
+            <article class="panel benchmark-panel">
+              <div class="panel-topline">
+                <h3>Meta-World</h3>
+                <span>5 tasks</span>
+              </div>
+              <img
+                src="assets/images/metaworld.png"
+                alt="Meta-World tasks used in the paper."
+              />
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Overall</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>DP*</td>
+                      <td>51.7%</td>
+                    </tr>
+                    <tr>
+                      <td>GCDP*</td>
+                      <td>52.7%</td>
+                    </tr>
+                    <tr>
+                      <td>AVDC</td>
+                      <td>23.2%</td>
+                    </tr>
+                    <tr>
+                      <td>AVDC w/ Replan</td>
+                      <td>52.0%</td>
+                    </tr>
+                    <tr>
+                      <td>Grounding V2A</td>
+                      <td>19.2%</td>
+                    </tr>
+                    <tr class="emphasis-row">
+                      <td>Ours</td>
+                      <td>84.0%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="benchmark-note">
+                IRL4IDM reaches <strong>56.0%</strong> on hammer and
+                <strong>80.0%</strong> on assembly, two tasks highlighted in
+                the paper as especially challenging for prior methods.
+              </p>
+            </article>
+
+            <article class="panel benchmark-panel">
+              <div class="panel-topline">
+                <h3>LIBERO Kitchen Scene</h3>
+                <span>4 tasks</span>
+              </div>
+              <img
+                src="assets/images/libero.png"
+                alt="LIBERO tasks used in the paper."
+              />
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Overall</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>AVDC</td>
+                      <td>0.0%</td>
+                    </tr>
+                    <tr>
+                      <td>AVDC w/ Replan</td>
+                      <td>0.0%</td>
+                    </tr>
+                    <tr>
+                      <td>Grounding V2A</td>
+                      <td>8.0%</td>
+                    </tr>
+                    <tr class="emphasis-row">
+                      <td>Ours</td>
+                      <td>84.0%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="benchmark-note">
+                IRL4IDM achieves <strong>88.0%</strong> on opening the
+                microwave, <strong>96.0%</strong> on opening the drawer,
+                <strong>84.0%</strong> on placing the bowl on the plate, and
+                <strong>68.0%</strong> on placing the bowl on top of the
+                cabinet.
+              </p>
+            </article>
+          </div>
+
+          <div class="ablation-layout">
+            <article class="panel ablation-panel">
+              <div class="panel-topline">
+                <h3>Finetuning matters</h3>
+                <span>Figure 5</span>
+              </div>
+              <img
+                src="assets/images/finetune_vs_no_finetune.png"
+                alt="Performance with and without finetuning in Meta-World."
+              />
+              <p>
+                Replacing pseudo-subgoals with model-generated subgoals during
+                the final stage consistently improves performance, with gains
+                ranging from 12 to 28 absolute points.
+              </p>
+            </article>
+
+            <article class="panel text-panel">
+              <div class="panel-topline">
+                <h3>Design takeaways</h3>
+                <span>Ablations</span>
+              </div>
+              <ul class="clean-list">
+                <li>Milestone rewards substantially improve optimization over dense reward alone.</li>
+                <li>Sparse environment success provides useful additional supervision.</li>
+                <li>A slightly looser subgoal-switching threshold can help when the learned encoder is imperfect.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="demos">
+          <div class="section-heading">
+            <p class="eyebrow">Demos</p>
+            <h2>Qualitative examples</h2>
+          </div>
+
+          <div class="demo-grid">
+            <article class="panel demo-panel demo-panel-wide">
+              <div class="panel-topline">
+                <h3>Main project video</h3>
+                <a href="assets/videos/main-demo.mp4">Download MP4</a>
+              </div>
+              <video
+                src="assets/videos/main-demo.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                poster="assets/images/teaser.png"
+              ></video>
+            </article>
+
+            <article class="panel demo-panel">
+              <div class="panel-topline">
+                <h3>Meta-World clip</h3>
+                <span>Nuanced grasping</span>
+              </div>
+              <video
+                src="assets/videos/metaworld-demo.mp4"
+                controls
+                muted
+                loop
+                playsinline
+              ></video>
+            </article>
+
+            <article class="panel demo-panel">
+              <div class="panel-topline">
+                <h3>LIBERO clip</h3>
+                <span>Kitchen scene</span>
+              </div>
+              <video
+                src="assets/videos/libero-demo.mp4"
+                controls
+                muted
+                loop
+                playsinline
+              ></video>
+            </article>
+          </div>
+        </section>
+
+        <section class="section resources-section">
+          <div class="resource-card panel">
+            <div>
+              <p class="eyebrow">Resources</p>
+              <h2>Paper, demos, and release status</h2>
+              <p>
+                This page is built from the current paper draft and available
+                project media. The paper notes that code will be open-sourced in
+                the final version.
+              </p>
+            </div>
+            <div class="resource-actions">
+              <a class="button button-primary" href="assets/paper/IRL4IDM_IROS2026.pdf">Paper PDF</a>
+              <a class="button button-secondary" href="assets/videos/main-demo.mp4">Project Video</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="citation">
+          <div class="section-heading">
+            <p class="eyebrow">Citation</p>
+            <h2>BibTeX</h2>
+          </div>
+          <div class="citation-box panel">
+            <button class="copy-button" type="button" data-copy-target="bibtex">
+              Copy
+            </button>
+            <pre id="bibtex"><code>@inproceedings{irl4idm2026,
+  title={IRL4IDM: Inverse Reinforcement Learning for Inverse Dynamics Model in Video Generation Robot Planner},
+  author={Anonymous Authors},
+  booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year={2026}
+}</code></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
