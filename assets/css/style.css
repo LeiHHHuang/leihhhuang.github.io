@@ -179,17 +179,30 @@ strong {
     border-bottom: 1px solid #ddd;
 }
 
-.research-thumb {
-    width: 20em;
-    height: 20em;
-    float: left;
+.research-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
     margin-top: 7px;
-    padding-right: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
-.research-thumb img {
+.research-thumb {
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.research-thumb img,
+.research-thumb video {
     width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+.research-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .research-proj-title {
